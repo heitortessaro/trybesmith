@@ -9,6 +9,7 @@ export default class OrderModel {
   }
 
   public async getAll(): Promise<Order[]> {
+    // https://dev.mysql.com/doc/refman/5.7/en/aggregate-functions.html#function_json-arrayagg
     const result = await this.connection.execute(
       `SELECTo.id AS id,
       o.userId AS userId,
