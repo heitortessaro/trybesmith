@@ -4,6 +4,8 @@ import 'express-async-errors';
 import ProductRoutes from './routes/product.routes';
 import UserRoutes from './routes/user.routes';
 import OrderRoutes from './routes/order.routes';
+import LoginRoutes from './routes/login.routes';
+import errorHandler from './middleware/errorHandler.middleware';
 
 const app = express();
 
@@ -16,6 +18,8 @@ app.get('/', (req: Request, res: Response) => {
 app.use(ProductRoutes);
 app.use(UserRoutes);
 app.use(OrderRoutes);
+app.use(LoginRoutes);
+app.use(errorHandler);
 
 app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
   const { name, message, details } = err as any;
