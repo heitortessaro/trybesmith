@@ -1,6 +1,6 @@
 import { NextFunction, Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
-import Joi from 'joi';
+import Joi, { ValidationResult } from 'joi';
 import createError from '../helpers/createError';
 import Login from '../interfaces/login.interface';
 import { RequestWithBody } from '../types/reqWithBody.type';
@@ -17,13 +17,14 @@ import UserModel from '../models/user.model';
 //   } 
 // }
 
-const validateLoginProperties = async (loginInfo:Login):Promise<void> => {
+const validateLoginProperties = async (loginInfo:Login):Promise<ValidationResult> => {
   const schema = Joi.object({
     username: Joi.string().min(1).required(),
     password: Joi.string().min(1).required(),
   });
-  const { error } = await schema.validateAsync(loginInfo);
+  const { error, value } = await schema.validateAsync(loginInfo);
   if (error) throw error;
+  return value;
 };
 
 const validateLogin = async (req: RequestWithBody, _res:Response, next:NextFunction) => {
