@@ -1,20 +1,11 @@
-import { NextFunction, Request, Response } from 'express';
+import { NextFunction, Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
 import Joi from 'joi';
 import createError from '../helpers/createError';
 import Login from '../interfaces/login.interface';
-
+import { RequestWithBody } from '../types/reqWithBody.type';
 import connection from '../models/connection';
 import UserModel from '../models/user.model';
-
-type User = {
-  username: string,
-  id: number,
-};
-
-type RequestWithBody = Request & {
-  user: User,
-};
 
 // Depois refatorar e incluir a extensão de Request como classe
 // class RequestWithBody extends Request { 

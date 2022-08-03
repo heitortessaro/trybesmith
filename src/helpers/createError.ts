@@ -4,7 +4,7 @@ class NewError extends Error {
   statusCode: number | undefined;
 }
 
-export default (statusCode: number, message:string) => {
+export default (statusCode: number, message?:string) => {
   const error = new NewError(message);
   error.statusCode = statusCode;
   throw error;
