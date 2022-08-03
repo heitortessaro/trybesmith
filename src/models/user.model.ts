@@ -1,5 +1,5 @@
 import { StatusCodes } from 'http-status-codes';
-import { Pool, ResultSetHeader } from 'mysql2/promise';
+import { Pool, ResultSetHeader, RowDataPacket } from 'mysql2/promise';
 import createError from '../helpers/createError';
 // import dotenv from 'dotenv';
 // import jwt, { SignOptions } from 'jsonwebtoken';
@@ -24,11 +24,19 @@ export default class UserModel {
       createError(StatusCodes.INTERNAL_SERVER_ERROR, 'Error accessing database.');
     }
     const id = result[0].insertId;
-    // const options: SignOptions = {
-    //   expiresIn: '1d',
-    // };
-    // const token = jwt.sign({ username, id }, process.env.MY_SECRET || 'senhaFraca', options);
-    // return token;
     return { username, id };
+  }
+
+  public async getUserByUsername(username: string): Promise<User> {
+    const [result] = await this.connection.execute<RowDataPacket[]>(
+      `SELECT * FROM Trybesmith.Users
+      WHERE username = ?`,
+      [username],
+    );
+    if (!result[0]) {
+      createError(StatusCodes.UNAUTHORIZED, 'Username or password invalid'); 
+    }
+    const user = result[0];
+    return user as User;
   }
 }
